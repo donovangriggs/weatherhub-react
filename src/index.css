@@ -1,0 +1,47 @@
+@import "tailwindcss";
+
+html, body {
+  background-color: #101922;
+  overscroll-behavior: none;
+}
+
+@theme {
+  --color-primary: #2b8cee;
+  --color-background-light: #f6f7f8;
+  --color-background-dark: #101922;
+  --font-display: "Space Grotesk", system-ui, sans-serif;
+}
+
+.glass {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glass-active {
+  background: rgba(43, 140, 238, 0.1);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(43, 140, 238, 0.4);
+  box-shadow: 0 0 20px rgba(43, 140, 238, 0.15);
+}
+
+/* Hide scrollbar but keep scroll functionality */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Live indicator pulse */
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.animate-pulse-dot {
+  animation: pulse-dot 2s ease-in-out infinite;
+}
