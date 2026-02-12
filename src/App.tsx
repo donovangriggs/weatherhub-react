@@ -8,6 +8,7 @@ import { TemporalWindow } from './components/temporal/TemporalWindow'
 import { SecondaryInsights } from './components/insights/SecondaryInsights'
 import { Footer } from './components/layout/Footer'
 import { ErrorBoundary } from './components/ui/ErrorBoundary'
+import { OfflineFallback } from './components/ui/OfflineFallback'
 import { staggerContainer, fadeSlideUp } from './animation/variants'
 
 const LoadingScreen = () => {
@@ -26,9 +27,28 @@ const LoadingScreen = () => {
   )
 }
 
+const useOnlineStatus = () => {
+  const [isOnline, setIsOnline] = useState(navigator.onLine)
+
+  useEffect(() => {
+    const goOnline = () => setIsOnline(true)
+    const goOffline = () => setIsOnline(false)
+    window.addEventListener('online', goOnline)
+    window.addEventListener('offline', goOffline)
+    return () => {
+      window.removeEventListener('online', goOnline)
+      window.removeEventListener('offline', goOffline)
+    }
+  }, [])
+
+  return isOnline
+}
+
 const AppContent = () => {
   const { weatherState } = useWeatherContext()
+  const isOnline = useOnlineStatus()
 
+  if (!isOnline && !weatherState) return <OfflineFallback />
   if (!weatherState) return <LoadingScreen />
 
   return (
