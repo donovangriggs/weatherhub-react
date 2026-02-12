@@ -33,13 +33,13 @@ Open [http://localhost:5173](http://localhost:5173) in your browser.
 
 ## Scripts
 
-| Command              | Description                              |
-| -------------------- | ---------------------------------------- |
-| \`npm run dev\`      | Start development server                 |
-| \`npm run build\`    | Production build with PWA service worker |
-| \`npm run preview\`  | Preview production build locally         |
-| \`npx vitest run\`   | Run all tests                            |
-| \`npx tsc --noEmit\` | Type check without emitting              |
+| Command            | Description                              |
+| ------------------ | ---------------------------------------- |
+| `npm run dev`      | Start development server                 |
+| `npm run build`    | Production build with PWA service worker |
+| `npm run preview`  | Preview production build locally         |
+| `npx vitest run`   | Run all tests                            |
+| `npx tsc --noEmit` | Type check without emitting              |
 
 ## Caching Strategy
 
