@@ -25,9 +25,10 @@ A real-time weather dashboard built with React 19, TypeScript 5.9, and Vite 7. F
 
 ## Getting Started
 
-`npm install`
-
-`npm run dev`
+```bash
+npm install
+npm run dev
+```
 
 Open [http://localhost:5173](http://localhost:5173) in your browser.
 
@@ -48,25 +49,25 @@ WeatherHub uses a multi-layer caching approach:
 1. **localStorage** — Weather data cached with 15-minute TTL, user preferences persisted
 2. **Service Worker (Workbox)** — Precaches static assets, runtime caches API responses and fonts
 3. **Cache Strategies:**
-   - \`CacheFirst\` for Google Fonts webfonts and map tiles (immutable content)
-   - \`StaleWhileRevalidate\` for Google Fonts stylesheets
-   - \`NetworkFirst\` with 5s timeout for weather and geocoding APIs
+   - `CacheFirst` for Google Fonts webfonts and map tiles (immutable content)
+   - `StaleWhileRevalidate` for Google Fonts stylesheets
+   - `NetworkFirst` with 5s timeout for weather and geocoding APIs
 
 ## Project Structure
 
-\`\`\`
+```
 src/
-├── api/ # API fetch functions (weather, geocoding)
-├── animation/ # Shared Motion animation variants
+├── api/            # API fetch functions (weather, geocoding)
+├── animation/      # Shared Motion animation variants
 ├── components/
-│ ├── hero/ # Main weather display (temperature, illustration, stats)
-│ ├── temporal/ # 7-day forecast tiles
-│ ├── insights/ # Daylight schedule, precipitation map
-│ ├── layout/ # Navbar, Footer
-│ └── ui/ # Reusable components (GlassCard, SearchInput, etc.)
-├── context/ # React context for weather state
-├── hooks/ # Custom hooks (useWeather, useGeocoding, etc.)
-├── types/ # TypeScript interfaces
-├── utils/ # Helpers (cache, formatting, conversions)
-└── **tests**/ # Test files mirroring src structure
-\`\`\`
+│   ├── hero/       # Main weather display (temperature, illustration, stats)
+│   ├── temporal/   # 7-day forecast tiles
+│   ├── insights/   # Daylight schedule, precipitation map
+│   ├── layout/     # Navbar, Footer
+│   └── ui/         # Reusable components (GlassCard, SearchInput, etc.)
+├── context/        # React context for weather state
+├── hooks/          # Custom hooks (useWeather, useGeocoding, etc.)
+├── types/          # TypeScript interfaces
+├── utils/          # Helpers (cache, formatting, conversions)
+└── __tests__/      # Test files mirroring src structure
+```
