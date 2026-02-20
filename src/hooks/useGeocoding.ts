@@ -1,11 +1,12 @@
 import { useState, useEffect, useRef } from 'react'
 import type { GeocodingResult } from '../types/geocoding'
 import { searchCities } from '../api/geocodingApi'
+import { dispatchToast } from '../utils/toastEvents'
 
 export const useGeocoding = (query: string, debounceMs = 350) => {
   const [results, setResults] = useState<GeocodingResult[]>([])
   const [isLoading, setIsLoading] = useState(false)
-  const requestIdRef = useRef(0)
+  const abortRef = useRef<AbortController | null>(null)
 
   useEffect(() => {
     if (query.trim().length < 2) {
@@ -14,20 +15,25 @@ export const useGeocoding = (query: string, debounceMs = 350) => {
     }
 
     setIsLoading(true)
-    const currentRequestId = ++requestIdRef.current
 
     const timer = setTimeout(async () => {
+      abortRef.current?.abort()
+      const controller = new AbortController()
+      abortRef.current = controller
+
       try {
-        const data = await searchCities(query)
-        if (currentRequestId === requestIdRef.current) {
+        const data = await searchCities(query, controller.signal)
+        if (!controller.signal.aborted) {
           setResults(data)
         }
-      } catch {
-        if (currentRequestId === requestIdRef.current) {
+      } catch (err) {
+        if (err instanceof DOMException && err.name === 'AbortError') return
+        if (!controller.signal.aborted) {
           setResults([])
+          dispatchToast('City search failed — please try again', 'error')
         }
       } finally {
-        if (currentRequestId === requestIdRef.current) {
+        if (!controller.signal.aborted) {
           setIsLoading(false)
         }
       }
@@ -35,6 +41,7 @@ export const useGeocoding = (query: string, debounceMs = 350) => {
 
     return () => {
       clearTimeout(timer)
+      abortRef.current?.abort()
       setIsLoading(false)
     }
   }, [query, debounceMs])

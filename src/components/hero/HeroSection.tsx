@@ -16,7 +16,9 @@ export const HeroSection = () => {
   }
 
   const { days, selectedDayIndex } = weatherState
-  const weatherCode = days[selectedDayIndex].weatherCode
+  const selectedDay = days[selectedDayIndex]
+  if (!selectedDay) return null
+  const weatherCode = selectedDay.weatherCode
 
   return (
     <section className="relative overflow-hidden rounded-2xl sm:rounded-3xl p-5 sm:p-8 lg:p-12 glass border-white/10 flex flex-col lg:flex-row justify-between items-center gap-4 sm:gap-8">

@@ -60,7 +60,7 @@ export const DayTile = ({ day, index, isToday, isHistory, isSelected }: Props) =
           {formatTemperature(day.temperatureMax, unit)}
         </div>
         <div className="text-[10px] text-slate-500 font-medium">
-          H: {formatTemperature(day.temperatureMax, unit)} L: {formatTemperature(day.temperatureMin, unit)}
+          L: {formatTemperature(day.temperatureMin, unit)}
         </div>
       </div>
     </motion.button>

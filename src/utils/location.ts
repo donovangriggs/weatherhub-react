@@ -1,4 +1,5 @@
 import type { Location } from '../types/weather'
+import { dispatchToast } from './toastEvents'
 
 export const FALLBACK_LOCATION: Location = {
   name: 'Cape Town',
@@ -21,7 +22,7 @@ export const saveLocation = (loc: Location): void => {
   try {
     localStorage.setItem('lastLocation', JSON.stringify(loc))
   } catch {
-    // localStorage full or unavailable
+    dispatchToast('Unable to save your location — storage may be full', 'warning')
   }
 }
 

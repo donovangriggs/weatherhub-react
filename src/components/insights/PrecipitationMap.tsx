@@ -55,13 +55,14 @@ export const PrecipitationMap = () => {
     }
   }, [])
 
+  const location = weatherState?.location
   useEffect(() => {
-    if (!weatherState || !mapInstanceRef.current || !markerRef.current) return
-    const { latitude, longitude } = weatherState.location
+    if (!location || !mapInstanceRef.current || !markerRef.current) return
+    const { latitude, longitude } = location
     mapInstanceRef.current.setView([latitude, longitude], ZOOM)
     markerRef.current.setLatLng([latitude, longitude])
     mapInstanceRef.current.invalidateSize()
-  }, [weatherState?.location])
+  }, [location])
 
   return (
     <GlassCard className="lg:col-span-2 relative overflow-hidden min-h-[200px] flex flex-col">

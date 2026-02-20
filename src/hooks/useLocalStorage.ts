@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react'
+import { dispatchToast } from '../utils/toastEvents'
 
 export const useLocalStorage = <T>(key: string, initialValue: T): [T, (value: T) => void] => {
   const [storedValue, setStoredValue] = useState<T>(() => {
@@ -16,7 +17,7 @@ export const useLocalStorage = <T>(key: string, initialValue: T): [T, (value: T)
       try {
         localStorage.setItem(key, JSON.stringify(value))
       } catch {
-        // localStorage full or unavailable
+        dispatchToast('Unable to save your preferences — storage may be full', 'warning')
       }
     },
     [key],

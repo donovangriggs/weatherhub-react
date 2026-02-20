@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import { WeatherProvider } from './context/WeatherContext'
+import { ToastProvider } from './context/ToastContext'
 import { useWeatherContext } from './context/weatherContextValue'
+import { useOnlineStatus } from './hooks/useOnlineStatus'
 import { Navbar } from './components/layout/Navbar'
 import { HeroSection } from './components/hero/HeroSection'
 import { TemporalWindow } from './components/temporal/TemporalWindow'
@@ -25,23 +27,6 @@ const LoadingScreen = () => {
       <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin mt-4" />
     </div>
   )
-}
-
-const useOnlineStatus = () => {
-  const [isOnline, setIsOnline] = useState(navigator.onLine)
-
-  useEffect(() => {
-    const goOnline = () => setIsOnline(true)
-    const goOffline = () => setIsOnline(false)
-    window.addEventListener('online', goOnline)
-    window.addEventListener('offline', goOffline)
-    return () => {
-      window.removeEventListener('online', goOnline)
-      window.removeEventListener('offline', goOffline)
-    }
-  }, [])
-
-  return isOnline
 }
 
 const AppContent = () => {
@@ -117,9 +102,11 @@ const App = () => {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.4, delay: 0.1 }}
           >
-            <WeatherProvider>
-              <AppContent />
-            </WeatherProvider>
+            <ToastProvider>
+              <WeatherProvider>
+                <AppContent />
+              </WeatherProvider>
+            </ToastProvider>
           </motion.div>
         )}
       </AnimatePresence>

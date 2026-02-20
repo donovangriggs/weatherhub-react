@@ -1,3 +1,5 @@
+import { dispatchToast } from './toastEvents'
+
 interface CacheEntry<T> {
   data: T
   timestamp: number
@@ -28,7 +30,7 @@ export const setCache = <T>(key: string, data: T, ttl: number = DEFAULT_TTL): vo
     const entry: CacheEntry<T> = { data, timestamp: Date.now(), ttl, version: CACHE_VERSION }
     localStorage.setItem(key, JSON.stringify(entry))
   } catch {
-    // localStorage full or unavailable
+    dispatchToast('Unable to cache weather data — storage may be full', 'warning')
   }
 }
 

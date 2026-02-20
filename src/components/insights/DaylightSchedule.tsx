@@ -27,6 +27,7 @@ export const DaylightSchedule = () => {
 
   const { days, selectedDayIndex } = weatherState
   const selectedDay = days[selectedDayIndex]
+  if (!selectedDay) return null
 
   return (
     <GlassCard className="space-y-4">

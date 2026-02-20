@@ -16,6 +16,7 @@ export const CurrentWeather = ({ compact = false }: { compact?: boolean }) => {
 
   const { location, current, days, selectedDayIndex, todayIndex } = weatherState
   const selectedDay = days[selectedDayIndex]
+  if (!selectedDay) return null
   const isCurrentDay = selectedDayIndex === todayIndex
 
   const mainTemp = isCurrentDay ? current.temperature_2m : selectedDay.temperatureMax

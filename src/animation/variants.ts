@@ -125,3 +125,17 @@ export const statItem: Variants = {
   hidden: { opacity: 0, y: 8 },
   visible: { opacity: 1, y: 0, transition: springGentle },
 }
+
+// --- Toast notifications ---
+
+export const toastVariants: Variants = {
+  hidden: { opacity: 0, y: 16, scale: 0.95 },
+  visible: { opacity: 1, y: 0, scale: 1 },
+  exit: { opacity: 0, x: 80, transition: { duration: 0.2 } },
+}
+
+export const toastTransition: Transition = {
+  type: 'spring',
+  stiffness: 350,
+  damping: 28,
+}

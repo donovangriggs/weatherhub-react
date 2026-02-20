@@ -3,6 +3,7 @@ import type { WeatherState, DayWeather } from '../types/weather'
 import { fetchWeather, PAST_DAYS } from '../api/weatherApi'
 import { reverseGeocode } from '../api/geocodingApi'
 import { getCached, setCache, buildCacheKey } from '../utils/cache'
+import { dispatchToast } from '../utils/toastEvents'
 import { FALLBACK_LOCATION, getSavedLocation, saveLocation, getBrowserLocation } from '../utils/location'
 
 const DEFAULT_DAY_INDEX = PAST_DAYS
@@ -13,8 +14,13 @@ export const useWeather = () => {
   const [error, setError] = useState<string | null>(null)
   const [location, setLocation] = useState(getSavedLocation)
   const initRef = useRef(false)
+  const abortRef = useRef<AbortController | null>(null)
 
   const loadWeather = useCallback(async (loc: typeof FALLBACK_LOCATION) => {
+    abortRef.current?.abort()
+    const controller = new AbortController()
+    abortRef.current = controller
+
     saveLocation(loc)
     const cacheKey = buildCacheKey(loc.latitude, loc.longitude)
     const cached = getCached<WeatherState>(cacheKey)
@@ -27,7 +33,7 @@ export const useWeather = () => {
     setIsLoading(true)
     setError(null)
     try {
-      const raw = await fetchWeather(loc.latitude, loc.longitude)
+      const raw = await fetchWeather(loc.latitude, loc.longitude, controller.signal)
 
       const days: DayWeather[] = raw.daily.time.map((date, i) => ({
         date,
@@ -57,12 +63,16 @@ export const useWeather = () => {
       setWeatherState(state)
       setCache(cacheKey, state)
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load weather data')
+      if (err instanceof DOMException && err.name === 'AbortError') return
+      const message = err instanceof Error ? err.message : 'Failed to load weather data'
+      setError(message)
+      dispatchToast(message, 'error')
     } finally {
       setIsLoading(false)
     }
   }, [])
 
+  // Init: resolve location, then load weather
   useEffect(() => {
     if (initRef.current) return
     initRef.current = true
@@ -86,28 +96,29 @@ export const useWeather = () => {
         setLocation(FALLBACK_LOCATION)
       }
     })()
-  }, [location, loadWeather])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
+  // Load weather when location changes after init
   useEffect(() => {
-    if (initRef.current && location) {
-      void loadWeather(location)
-    }
+    if (!initRef.current || !location) return
+    void loadWeather(location)
   }, [location, loadWeather])
 
-  const selectDay = (index: number) => {
+  const selectDay = useCallback((index: number) => {
     setWeatherState((prev) => (prev ? { ...prev, selectedDayIndex: index } : prev))
-  }
+  }, [])
 
-  const changeLocation = (loc: typeof FALLBACK_LOCATION) => {
+  const changeLocation = useCallback((loc: typeof FALLBACK_LOCATION) => {
     setLocation(loc)
-  }
+  }, [])
 
-  const refresh = () => {
+  const refresh = useCallback(() => {
     if (!location) return
     const cacheKey = buildCacheKey(location.latitude, location.longitude)
     localStorage.removeItem(cacheKey)
     void loadWeather(location)
-  }
+  }, [location, loadWeather])
 
   return { weatherState, isLoading, error, selectDay, changeLocation, refresh }
 }

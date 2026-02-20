@@ -21,6 +21,7 @@ export const WeatherIllustration = ({ weatherCode }: Props) => {
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.8 }}
           transition={{ duration: 0.25 }}
+          aria-hidden="true"
           className="material-symbols-outlined text-primary/80"
           style={{ fontSize: 'clamp(72px, 10vw, 140px)', lineHeight: 1 }}
         >

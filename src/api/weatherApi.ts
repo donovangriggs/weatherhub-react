@@ -8,6 +8,7 @@ const FORECAST_DAYS = 4
 export const fetchWeather = async (
   latitude: number,
   longitude: number,
+  signal?: AbortSignal,
 ): Promise<OpenMeteoForecastResponse> => {
   const params = new URLSearchParams({
     latitude: latitude.toString(),
@@ -37,7 +38,7 @@ export const fetchWeather = async (
     timezone: 'auto',
   })
 
-  const response = await fetch(`${BASE_URL}?${params}`)
+  const response = await fetch(`${BASE_URL}?${params}`, { signal })
   if (!response.ok) {
     throw new Error(`Weather API error: ${response.status} ${response.statusText}`)
   }
