@@ -40,7 +40,7 @@ export const DayTile = ({ day, index, isToday, isHistory, isSelected }: Props) =
 
       <span
         className={`text-xs font-bold uppercase tracking-widest ${
-          isSelected ? 'text-primary mt-1' : isHistory ? 'text-slate-500' : 'text-slate-400'
+          isSelected ? 'text-primary mt-1' : isHistory ? 'text-slate-400' : 'text-slate-300'
         }`}
       >
         {formatDayLabel(day.date)}
@@ -56,10 +56,10 @@ export const DayTile = ({ day, index, isToday, isHistory, isSelected }: Props) =
       </div>
 
       <div>
-        <div className={`font-bold ${isSelected ? 'text-2xl font-black' : 'text-xl'}`}>
+        <div className={`font-bold ${isSelected ? 'text-2xl font-black text-white' : 'text-xl'}`}>
           {formatTemperature(day.temperatureMax, unit)}
         </div>
-        <div className="text-[10px] text-slate-500 font-medium">
+        <div className={`text-[10px] font-medium ${isSelected ? 'text-slate-200' : 'text-slate-300'}`}>
           L: {formatTemperature(day.temperatureMin, unit)}
         </div>
       </div>

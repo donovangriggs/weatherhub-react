@@ -65,7 +65,7 @@ export const QuickSwitcher = () => {
       <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
         {hasFavorites && (
           <div className="flex items-center gap-2">
-            <span className="flex items-center gap-1 text-[10px] uppercase tracking-widest text-slate-500 font-medium">
+            <span className="flex items-center gap-1 text-[10px] uppercase tracking-widest text-slate-400 font-medium">
               <MaterialIcon name="star" className="text-xs text-yellow-500/70" />
               Favorites
             </span>
@@ -84,7 +84,7 @@ export const QuickSwitcher = () => {
         )}
         {hasRecents && (
           <div className="flex items-center gap-2">
-            <span className="flex items-center gap-1 text-[10px] uppercase tracking-widest text-slate-500 font-medium">
+            <span className="flex items-center gap-1 text-[10px] uppercase tracking-widest text-slate-400 font-medium">
               <MaterialIcon name="history" className="text-xs" />
               Recents
             </span>

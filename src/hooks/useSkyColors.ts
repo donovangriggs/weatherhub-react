@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import type { SkyColors, TimeOfDay } from '../utils/skyPalette'
 import { getTimeOfDay, SKY_PALETTES, interpolateColors } from '../utils/skyPalette'
 
@@ -65,40 +65,12 @@ const computeInterpolationFactor = (
   return 1 - remaining / transitionWindow
 }
 
-const computeTimeLapseColors = (progress: number): { colors: SkyColors; state: TimeOfDay } => {
-  const totalStates = TIME_STATES.length
-  const scaledProgress = Math.max(0, Math.min(1, progress)) * totalStates
-  const stateIndex = Math.min(Math.floor(scaledProgress), totalStates - 1)
-  const nextIndex = (stateIndex + 1) % totalStates
-  const factor = scaledProgress - stateIndex
-
-  const currentState = TIME_STATES[stateIndex]
-  const nextState = TIME_STATES[nextIndex]
-
-  return {
-    colors: interpolateColors(SKY_PALETTES[currentState], SKY_PALETTES[nextState], factor),
-    state: currentState,
-  }
-}
-
 export const useSkyColors = (options: UseSkyColorsOptions) => {
   const { timezone, sunrise, sunset } = options
   const [skyColors, setSkyColors] = useState<SkyColors>(SKY_PALETTES.day)
   const [timeOfDay, setTimeOfDay] = useState<TimeOfDay>('day')
-  const timeLapseRef = useRef<number | null>(null)
-
-  const setTimeLapseProgress = useCallback((progress: number | null) => {
-    timeLapseRef.current = progress
-    if (progress !== null) {
-      const result = computeTimeLapseColors(progress)
-      setSkyColors(result.colors)
-      setTimeOfDay(result.state)
-    }
-  }, [])
 
   const update = useCallback(() => {
-    if (timeLapseRef.current !== null) return
-
     const now = getCurrentTimeInTimezone(timezone)
     const safeSunrise = sunrise || getDefaultSunTimes(now).sunrise
     const safeSunset = sunset || getDefaultSunTimes(now).sunset
@@ -116,14 +88,5 @@ export const useSkyColors = (options: UseSkyColorsOptions) => {
     return () => clearInterval(interval)
   }, [update])
 
-  // When time-lapse ends, immediately recalculate real sky
-  const prevTimeLapseRef = useRef<number | null>(null)
-  useEffect(() => {
-    if (prevTimeLapseRef.current !== null && timeLapseRef.current === null) {
-      update()
-    }
-    prevTimeLapseRef.current = timeLapseRef.current
-  })
-
-  return { skyColors, timeOfDay, setTimeLapseProgress } as const
+  return { skyColors, timeOfDay } as const
 }

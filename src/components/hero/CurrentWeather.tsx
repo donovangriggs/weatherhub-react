@@ -66,8 +66,8 @@ export const CurrentWeather = ({ compact = false }: { compact?: boolean }) => {
         <h1 className="text-5xl tracking-tighter">
           <AnimatedTemp value={displayValue} fahrenheit={mainTemp} />
         </h1>
-        <p className="text-sm text-slate-400 mt-1">{description}</p>
-        <p className="text-xs text-slate-500 mt-0.5">
+        <p className="text-sm text-slate-200 mt-1">{description}</p>
+        <p className="text-xs text-slate-300 mt-0.5">
           H: {formatTemperature(selectedDay.temperatureMax, unit)} L: {formatTemperature(selectedDay.temperatureMin, unit)}
         </p>
       </div>
@@ -85,7 +85,7 @@ export const CurrentWeather = ({ compact = false }: { compact?: boolean }) => {
         <FavoriteButton location={location} />
       </div>
       <div className="flex items-center gap-3 mb-4">
-        <h1 className="text-7xl lg:text-9xl tracking-tighter">
+        <h1 className="text-8xl lg:text-9xl tracking-tighter">
           <AnimatedTemp value={displayValue} fahrenheit={mainTemp} />
         </h1>
         <span className="material-symbols-outlined text-slate-300/60" style={{ fontSize: '32px' }} aria-hidden="true">
@@ -93,13 +93,13 @@ export const CurrentWeather = ({ compact = false }: { compact?: boolean }) => {
         </span>
       </div>
       <div className="flex items-center gap-3 flex-wrap justify-center lg:justify-start">
-        <span className="text-2xl font-medium text-slate-400">{description}</span>
+        <span className="text-2xl font-medium text-slate-200">{description}</span>
         <span className="w-2 h-2 rounded-full bg-slate-600" />
         <span className="text-xl">
           H: {formatTemperature(selectedDay.temperatureMax, unit)} L: {formatTemperature(selectedDay.temperatureMin, unit)}
         </span>
       </div>
-      <p className="mt-4 text-slate-400 font-medium">{dateStr}</p>
+      <p className="mt-4 text-slate-300 font-medium">{dateStr}</p>
     </div>
   )
 }

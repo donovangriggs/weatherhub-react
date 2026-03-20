@@ -36,12 +36,19 @@ const KEYFRAMES = `
   100% { transform: translateX(-10%); }
 }
 @keyframes fogPulse {
-  0%, 100% { opacity: 0.1; }
-  50% { opacity: 0.3; }
+  0%, 100% { opacity: 0.15; }
+  50% { opacity: 0.4; }
 }
 @keyframes sunPulse {
-  0%, 100% { opacity: 0.15; }
-  50% { opacity: 0.25; }
+  0%, 100% { opacity: 0.25; }
+  50% { opacity: 0.4; }
+}
+@keyframes lightningFlash {
+  0%, 90%, 100% { opacity: 0; }
+  92% { opacity: 0.8; }
+  94% { opacity: 0.1; }
+  96% { opacity: 0.6; }
+  98% { opacity: 0; }
 }
 `
 
@@ -60,8 +67,8 @@ const ClearEffect = ({ intensity }: { intensity: string }) => {
     <div
       className="absolute inset-0"
       style={{
-        background: 'radial-gradient(ellipse 60% 40% at 70% 15%, rgba(255,220,100,0.15), transparent 70%)',
-        opacity: 0.15 * mult,
+        background: 'radial-gradient(ellipse 60% 40% at 70% 15%, rgba(255,220,100,0.25), transparent 70%)',
+        opacity: 0.3 * mult,
         animation: 'sunPulse 6s ease-in-out infinite',
       }}
     />
@@ -71,9 +78,9 @@ const ClearEffect = ({ intensity }: { intensity: string }) => {
 const CloudyEffect = ({ intensity }: { intensity: string }) => {
   const mult = INTENSITY_MULTIPLIER[intensity] ?? 1
   const blobs = useMemo(() => [
-    { top: '10%', left: '20%', w: 300, h: 150, delay: '0s', opacity: 0.06 * mult },
-    { top: '25%', left: '60%', w: 250, h: 120, delay: '-4s', opacity: 0.08 * mult },
-    { top: '5%', left: '40%', w: 350, h: 180, delay: '-8s', opacity: 0.05 * mult },
+    { top: '10%', left: '20%', w: 300, h: 150, delay: '0s', opacity: 0.15 * mult },
+    { top: '25%', left: '60%', w: 250, h: 120, delay: '-4s', opacity: 0.18 * mult },
+    { top: '5%', left: '40%', w: 350, h: 180, delay: '-8s', opacity: 0.12 * mult },
   ], [mult])
 
   return (
@@ -104,8 +111,8 @@ const FogEffect = ({ intensity }: { intensity: string }) => {
     <div
       className="absolute inset-0"
       style={{
-        background: 'linear-gradient(to bottom, rgba(180,190,200,0.15), rgba(160,170,180,0.08))',
-        opacity: 0.15 * mult,
+        background: 'linear-gradient(to bottom, rgba(180,190,200,0.25), rgba(160,170,180,0.15))',
+        opacity: 0.35 * mult,
         animation: 'fogPulse 8s ease-in-out infinite',
       }}
     />
@@ -179,6 +186,35 @@ const SnowEffect = ({ intensity }: { intensity: string }) => {
   )
 }
 
+const ThunderstormEffect = ({ intensity }: { intensity: string }) => {
+  const flashCount = 3
+  const flashes = useMemo(
+    () =>
+      Array.from({ length: flashCount }, (_, i) => ({
+        animDelay: `${i * 3.5}s`,
+        animDuration: `${7 + i * 2}s`,
+      })),
+    [],
+  )
+
+  return (
+    <>
+      <RainLikeEffect intensity="heavy" isDrizzle={false} />
+      {flashes.map((f, i) => (
+        <div
+          key={i}
+          className="absolute inset-0"
+          style={{
+            background: `rgba(255,255,255,${INTENSITY_MULTIPLIER[intensity] ?? 1 > 1 ? 0.3 : 0.2})`,
+            animation: `lightningFlash ${f.animDuration} ease-in-out ${f.animDelay} infinite`,
+            pointerEvents: 'none',
+          }}
+        />
+      ))}
+    </>
+  )
+}
+
 const SCENE_RENDERERS: Record<string, (props: { intensity: string }) => ReactNode> = {
   clear: ({ intensity }) => <ClearEffect intensity={intensity} />,
   cloudy: ({ intensity }) => <CloudyEffect intensity={intensity} />,
@@ -189,6 +225,7 @@ const SCENE_RENDERERS: Record<string, (props: { intensity: string }) => ReactNod
   snow: ({ intensity }) => <SnowEffect intensity={intensity} />,
   snowGrains: ({ intensity }) => <SnowEffect intensity={intensity} />,
   freezingRain: ({ intensity }) => <RainLikeEffect intensity={intensity} isDrizzle={false} />,
+  thunderstorm: ({ intensity }) => <ThunderstormEffect intensity={intensity} />,
 }
 
 export const CssWeatherEffect = ({ sceneType, intensity }: CssWeatherEffectProps) => {

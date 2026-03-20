@@ -32,7 +32,7 @@ export const TemporalWindow = () => {
       >
         <div>
           <h2 className="text-xl sm:text-2xl font-bold">Temporal Window</h2>
-          <p className="text-slate-400 text-xs sm:text-sm">Past performance and upcoming projections</p>
+          <p className="text-slate-300 text-xs sm:text-sm">Past performance and upcoming projections</p>
         </div>
       </motion.div>
 

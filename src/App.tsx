@@ -12,7 +12,6 @@ import { WeatherScene } from './components/atmosphere/WeatherScene'
 import { DawnLoadingScreen } from './components/atmosphere/DawnLoadingScreen'
 import { Navbar } from './components/layout/Navbar'
 import { QuickSwitcher } from './components/ui/QuickSwitcher'
-import { TimeLapseButton } from './components/ui/TimeLapseButton'
 import { DebugOverlay } from './components/ui/DebugOverlay'
 import { HeroSection } from './components/hero/HeroSection'
 import { TemporalWindow } from './components/temporal/TemporalWindow'
@@ -33,7 +32,7 @@ const AppContent = () => {
     ? weatherState.days[weatherState.todayIndex]
     : undefined
 
-  const { skyColors, timeOfDay, setTimeLapseProgress } = useSkyColors({
+  const { skyColors, timeOfDay } = useSkyColors({
     timezone: weatherState?.timezone ?? '',
     sunrise: today?.sunrise ?? '',
     sunset: today?.sunset ?? '',
@@ -109,7 +108,6 @@ const AppContent = () => {
       </div>
 
       {/* Floating controls */}
-      <TimeLapseButton onProgressChange={setTimeLapseProgress} disabled={isLoading} />
       <DebugOverlay
         skyTimeOfDay={timeOfDay}
         skyColors={skyColors}
