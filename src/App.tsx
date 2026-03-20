@@ -1,69 +1,116 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import { WeatherProvider } from './context/WeatherContext'
 import { ToastProvider } from './context/ToastContext'
 import { useWeatherContext } from './context/weatherContextValue'
 import { useOnlineStatus } from './hooks/useOnlineStatus'
+import { useSkyColors } from './hooks/useSkyColors'
+import { usePerformanceLevel } from './hooks/usePerformanceLevel'
+import { useParallax } from './hooks/useParallax'
+import { SkyGradient } from './components/atmosphere/SkyGradient'
+import { WeatherScene } from './components/atmosphere/WeatherScene'
+import { DawnLoadingScreen } from './components/atmosphere/DawnLoadingScreen'
 import { Navbar } from './components/layout/Navbar'
 import { QuickSwitcher } from './components/ui/QuickSwitcher'
+import { TimeLapseButton } from './components/ui/TimeLapseButton'
+import { DebugOverlay } from './components/ui/DebugOverlay'
 import { HeroSection } from './components/hero/HeroSection'
 import { TemporalWindow } from './components/temporal/TemporalWindow'
 import { SecondaryInsights } from './components/insights/SecondaryInsights'
 import { Footer } from './components/layout/Footer'
 import { ErrorBoundary } from './components/ui/ErrorBoundary'
 import { OfflineFallback } from './components/ui/OfflineFallback'
+import { getScene } from './utils/weatherSceneMap'
 import { staggerContainer, fadeSlideUp } from './animation/variants'
 
-const LoadingScreen = () => {
-  return (
-    <div className="bg-background-dark min-h-screen flex flex-col items-center justify-center gap-4">
-      <div className="bg-primary rounded-2xl flex items-center justify-center w-12 h-12">
-        <svg width="28" height="28" viewBox="0 -960 960 960" fill="white">
-          <path d="M260-160q-91 0-155.5-63T40-377q0-78 47-139t123-78q25-92 100-149t170-57q117 0 198.5 81.5T760-520q69 8 114.5 59.5T920-340q0 75-52.5 127.5T740-160H260Zm0-80h480q42 0 71-29t29-71q0-42-29-71t-71-29h-60v-80q0-83-58.5-141.5T480-720q-83 0-141.5 58.5T280-520h-20q-58 0-99 41t-41 99q0 58 41 99t99 41Zm220-240Z" />
-        </svg>
-      </div>
-      <span className="text-xl font-bold tracking-tight text-slate-100" style={{ fontFamily: 'system-ui' }}>
-        Weather<span className="text-primary">Hub</span>
-      </span>
-      <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin mt-4" />
-    </div>
-  )
-}
-
 const AppContent = () => {
-  const { weatherState } = useWeatherContext()
+  const { weatherState, isLoading } = useWeatherContext()
   const isOnline = useOnlineStatus()
+  const { level: performanceLevel } = usePerformanceLevel()
+  const { parallaxRef } = useParallax()
+
+  const today = weatherState
+    ? weatherState.days[weatherState.todayIndex]
+    : undefined
+
+  const { skyColors, timeOfDay, setTimeLapseProgress } = useSkyColors({
+    timezone: weatherState?.timezone ?? '',
+    sunrise: today?.sunrise ?? '',
+    sunset: today?.sunset ?? '',
+  })
+
+  const sceneConfig = weatherState
+    ? getScene(weatherState.current.weather_code, performanceLevel)
+    : null
+
+  // Set CSS custom properties for sky tinting on wrapper
+  const wrapperRef = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    const el = wrapperRef.current
+    if (!el) return
+    el.style.setProperty('--sky-top', skyColors.top)
+    el.style.setProperty('--sky-mid', skyColors.mid)
+    el.style.setProperty('--sky-bottom', skyColors.bottom)
+    el.style.setProperty('--sky-tint', skyColors.tint)
+  }, [skyColors])
 
   if (!isOnline && !weatherState) return <OfflineFallback />
-  if (!weatherState) return <LoadingScreen />
+
+  if (!weatherState || isLoading) {
+    return <DawnLoadingScreen />
+  }
 
   return (
-    <div className="bg-background-dark font-display text-slate-100 min-h-screen">
-      <Navbar />
-      <QuickSwitcher />
-      <motion.main
-        className="max-w-7xl mx-auto px-4 py-4 sm:p-6 space-y-6 sm:space-y-8"
-        variants={staggerContainer}
-        initial="hidden"
-        animate="visible"
-      >
-        <motion.div variants={fadeSlideUp}>
-          <HeroSection />
+    <div ref={wrapperRef} className="font-display text-slate-100 min-h-screen relative">
+      {/* Atmosphere layers */}
+      <div ref={parallaxRef}>
+        <SkyGradient skyColors={skyColors} />
+        {sceneConfig && sceneConfig.tier !== 'none' && (
+          <WeatherScene
+            weatherCode={weatherState.current.weather_code}
+            performanceLevel={performanceLevel}
+          />
+        )}
+      </div>
+
+      {/* UI Content */}
+      <div className="relative z-10">
+        <Navbar />
+        <QuickSwitcher />
+        <motion.main
+          className="max-w-7xl mx-auto px-4 py-4 sm:p-6 space-y-6 sm:space-y-8"
+          variants={staggerContainer}
+          initial="hidden"
+          animate="visible"
+        >
+          <motion.div variants={fadeSlideUp}>
+            <HeroSection />
+          </motion.div>
+          <motion.div variants={fadeSlideUp}>
+            <TemporalWindow />
+          </motion.div>
+          <motion.div variants={fadeSlideUp}>
+            <SecondaryInsights />
+          </motion.div>
+        </motion.main>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.5 }}
+        >
+          <Footer />
         </motion.div>
-        <motion.div variants={fadeSlideUp}>
-          <TemporalWindow />
-        </motion.div>
-        <motion.div variants={fadeSlideUp}>
-          <SecondaryInsights />
-        </motion.div>
-      </motion.main>
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.5 }}
-      >
-        <Footer />
-      </motion.div>
+      </div>
+
+      {/* Floating controls */}
+      <TimeLapseButton onProgressChange={setTimeLapseProgress} disabled={isLoading} />
+      <DebugOverlay
+        skyTimeOfDay={timeOfDay}
+        skyColors={skyColors}
+        performanceLevel={performanceLevel}
+        sceneType={sceneConfig?.type ?? 'clear'}
+        sceneTier={sceneConfig?.tier ?? 'none'}
+      />
     </div>
   )
 }
@@ -95,7 +142,7 @@ const App = () => {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
           >
-            <LoadingScreen />
+            <DawnLoadingScreen />
           </motion.div>
         ) : (
           <motion.div

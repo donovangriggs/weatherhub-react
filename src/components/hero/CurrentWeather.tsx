@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { useWeatherContext } from '../../context/weatherContextValue'
 import { MaterialIcon } from '../ui/MaterialIcon'
 import { FavoriteButton } from '../ui/FavoriteButton'
@@ -6,9 +7,32 @@ import { formatFullDate, formatTime } from '../../utils/dateFormatting'
 import { formatTemperature, fahrenheitToCelsius } from '../../utils/temperatureConversion'
 import { useAnimatedNumber } from '../../hooks/useAnimatedNumber'
 
-const AnimatedTemp = ({ value, className }: { value: number; className?: string }) => {
+const getTempWeight = (fahrenheit: number): number => {
+  if (fahrenheit < 0) return 300
+  if (fahrenheit < 40) return 300 + ((fahrenheit / 40) * 100)
+  if (fahrenheit < 70) return 400 + (((fahrenheit - 40) / 30) * 100)
+  if (fahrenheit < 90) return 500 + (((fahrenheit - 70) / 20) * 100)
+  return 700
+}
+
+const getTempTint = (fahrenheit: number): string | undefined => {
+  if (fahrenheit < 0) return '#93c5fd'
+  if (fahrenheit > 90) return '#fbbf24'
+  return undefined
+}
+
+const AnimatedTemp = ({ value, className, fahrenheit }: { value: number; className?: string; fahrenheit: number }) => {
   const display = useAnimatedNumber(value)
-  return <span className={className}>{display}°</span>
+  const weight = useMemo(() => Math.round(getTempWeight(fahrenheit)), [fahrenheit])
+  const tint = useMemo(() => getTempTint(fahrenheit), [fahrenheit])
+  return (
+    <span
+      className={className}
+      style={{ fontWeight: weight, color: tint, transition: 'font-weight 0.4s ease, color 0.4s ease' }}
+    >
+      {display}°
+    </span>
+  )
 }
 
 export const CurrentWeather = ({ compact = false }: { compact?: boolean }) => {
@@ -22,7 +46,7 @@ export const CurrentWeather = ({ compact = false }: { compact?: boolean }) => {
 
   const mainTemp = isCurrentDay ? current.temperature_2m : selectedDay.temperatureMax
   const displayValue = unit === 'celsius' ? fahrenheitToCelsius(mainTemp) : Math.round(mainTemp)
-  const { description } = getWeatherInfo(selectedDay.weatherCode)
+  const { description, icon } = getWeatherInfo(selectedDay.weatherCode)
 
   const dateStr = isCurrentDay
     ? `${formatFullDate(selectedDay.date)} • ${formatTime(current.time)}`
@@ -39,8 +63,8 @@ export const CurrentWeather = ({ compact = false }: { compact?: boolean }) => {
           </span>
           <FavoriteButton location={location} size="sm" />
         </div>
-        <h1 className="text-5xl font-bold tracking-tighter">
-          <AnimatedTemp value={displayValue} />
+        <h1 className="text-5xl tracking-tighter">
+          <AnimatedTemp value={displayValue} fahrenheit={mainTemp} />
         </h1>
         <p className="text-sm text-slate-400 mt-1">{description}</p>
         <p className="text-xs text-slate-500 mt-0.5">
@@ -60,9 +84,14 @@ export const CurrentWeather = ({ compact = false }: { compact?: boolean }) => {
         </span>
         <FavoriteButton location={location} />
       </div>
-      <h1 className="text-7xl lg:text-9xl font-bold tracking-tighter mb-4">
-        <AnimatedTemp value={displayValue} />
-      </h1>
+      <div className="flex items-center gap-3 mb-4">
+        <h1 className="text-7xl lg:text-9xl tracking-tighter">
+          <AnimatedTemp value={displayValue} fahrenheit={mainTemp} />
+        </h1>
+        <span className="material-symbols-outlined text-slate-300/60" style={{ fontSize: '32px' }} aria-hidden="true">
+          {icon}
+        </span>
+      </div>
       <div className="flex items-center gap-3 flex-wrap justify-center lg:justify-start">
         <span className="text-2xl font-medium text-slate-400">{description}</span>
         <span className="w-2 h-2 rounded-full bg-slate-600" />

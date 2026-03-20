@@ -45,3 +45,59 @@ html, body {
 .animate-pulse-dot {
   animation: pulse-dot 2s ease-in-out infinite;
 }
+
+/* Sky-tinted glass variant */
+.glass-tinted {
+  background: var(--sky-tint, rgba(255, 255, 255, 0.03));
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* Reduced blur on mobile for performance */
+@media (max-width: 768px) {
+  .glass, .glass-active, .glass-tinted {
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+}
+
+/* CSS Weather Effect Animations */
+@keyframes rain-fall {
+  0% { transform: translateY(-100vh); }
+  100% { transform: translateY(100vh); }
+}
+
+@keyframes snow-fall {
+  0% { transform: translateY(-100vh) translateX(0); }
+  50% { transform: translateY(0) translateX(20px); }
+  100% { transform: translateY(100vh) translateX(-10px); }
+}
+
+@keyframes cloud-drift {
+  0% { transform: translateX(-10%); opacity: 0.15; }
+  50% { opacity: 0.25; }
+  100% { transform: translateX(10%); opacity: 0.15; }
+}
+
+@keyframes fog-pulse {
+  0%, 100% { opacity: 0.1; }
+  50% { opacity: 0.25; }
+}
+
+@keyframes sun-glow {
+  0%, 100% { opacity: 0.15; transform: scale(1); }
+  50% { opacity: 0.25; transform: scale(1.05); }
+}
+
+@keyframes progress-arc {
+  from { stroke-dashoffset: 283; }
+  to { stroke-dashoffset: 0; }
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .glass, .glass-active, .glass-tinted {
+    transition: none !important;
+  }
+}
