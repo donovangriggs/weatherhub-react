@@ -5,6 +5,7 @@ import { ToastProvider } from './context/ToastContext'
 import { useWeatherContext } from './context/weatherContextValue'
 import { useOnlineStatus } from './hooks/useOnlineStatus'
 import { Navbar } from './components/layout/Navbar'
+import { QuickSwitcher } from './components/ui/QuickSwitcher'
 import { HeroSection } from './components/hero/HeroSection'
 import { TemporalWindow } from './components/temporal/TemporalWindow'
 import { SecondaryInsights } from './components/insights/SecondaryInsights'
@@ -39,6 +40,7 @@ const AppContent = () => {
   return (
     <div className="bg-background-dark font-display text-slate-100 min-h-screen">
       <Navbar />
+      <QuickSwitcher />
       <motion.main
         className="max-w-7xl mx-auto px-4 py-4 sm:p-6 space-y-6 sm:space-y-8"
         variants={staggerContainer}

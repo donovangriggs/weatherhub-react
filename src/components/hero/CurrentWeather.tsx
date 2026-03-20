@@ -1,5 +1,6 @@
 import { useWeatherContext } from '../../context/weatherContextValue'
 import { MaterialIcon } from '../ui/MaterialIcon'
+import { FavoriteButton } from '../ui/FavoriteButton'
 import { getWeatherInfo } from '../../utils/weatherCodeMap'
 import { formatFullDate, formatTime } from '../../utils/dateFormatting'
 import { formatTemperature, fahrenheitToCelsius } from '../../utils/temperatureConversion'
@@ -36,6 +37,7 @@ export const CurrentWeather = ({ compact = false }: { compact?: boolean }) => {
             {location.name}
             {location.region ? `, ${location.region}` : ''}
           </span>
+          <FavoriteButton location={location} size="sm" />
         </div>
         <h1 className="text-5xl font-bold tracking-tighter">
           <AnimatedTemp value={displayValue} />
@@ -56,6 +58,7 @@ export const CurrentWeather = ({ compact = false }: { compact?: boolean }) => {
           {location.name}
           {location.region ? `, ${location.region}` : ''}
         </span>
+        <FavoriteButton location={location} />
       </div>
       <h1 className="text-7xl lg:text-9xl font-bold tracking-tighter mb-4">
         <AnimatedTemp value={displayValue} />

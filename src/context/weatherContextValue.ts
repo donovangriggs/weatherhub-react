@@ -11,6 +11,12 @@ export interface WeatherContextValue {
   selectDay: (index: number) => void
   changeLocation: (loc: Location) => void
   refresh: () => void
+  favorites: Location[]
+  addFavorite: (loc: Location) => boolean
+  removeFavorite: (loc: Location) => void
+  isFavorite: (loc: Location) => boolean
+  toggleFavorite: (loc: Location) => void
+  recents: Location[]
 }
 
 export const WeatherContext = createContext<WeatherContextValue | null>(null)

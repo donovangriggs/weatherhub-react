@@ -14,6 +14,12 @@ const defaultContextValue: WeatherContextValue = {
   selectDay: vi.fn(),
   changeLocation: vi.fn(),
   refresh: vi.fn(),
+  favorites: [],
+  addFavorite: vi.fn(() => true),
+  removeFavorite: vi.fn(),
+  isFavorite: vi.fn(() => false),
+  toggleFavorite: vi.fn(),
+  recents: [],
 }
 
 export const renderWithContext = (
