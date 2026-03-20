@@ -4,12 +4,16 @@ A real-time weather dashboard built with React 19, TypeScript 5.9, and Vite 7. F
 
 ## Features
 
+- **Immersive Atmosphere** — Dynamic sky gradient background with CSS weather particle effects (rain, snow, fog, clouds, thunderstorm lightning)
 - **7-Day Temporal Window** — View past and forecast weather data with horizontal scroll on mobile
 - **Live Weather Data** — Powered by the Open-Meteo API (free, no API key required)
+- **Favorites & Recents** — Save up to 5 favorite locations, auto-track recent searches with quick-switch bar
 - **City Search** — Debounced geocoding search with dropdown results
 - **Unit Toggle** — Switch between Fahrenheit and Celsius with animated sliding indicator
+- **Temperature-Responsive Typography** — Font weight shifts with temperature (lighter = colder, bolder = hotter)
 - **Interactive Map** — Leaflet-powered precipitation map with location marker
-- **Animations** — Motion (Framer Motion) for entrance stagger, spring-animated temperatures, floating weather icon, and crossfade transitions
+- **Animations** — Motion (Framer Motion) for entrance stagger, spring-animated temperatures, and crossfade transitions
+- **Progressive Enhancement** — 3 performance levels with auto-degradation (reduced-motion / CSS-only / CSS+Canvas)
 - **PWA Support** — Service worker with intelligent caching strategies for offline use
 - **Responsive Design** — Optimized layouts for mobile, tablet, and desktop
 
@@ -20,7 +24,7 @@ A real-time weather dashboard built with React 19, TypeScript 5.9, and Vite 7. F
 - **Styling:** Tailwind CSS v4 with glassmorphism design
 - **Animation:** Motion (Framer Motion rebrand)
 - **Maps:** Leaflet.js
-- **Testing:** Vitest + React Testing Library (61 tests)
+- **Testing:** Vitest + React Testing Library (117 tests)
 - **PWA:** vite-plugin-pwa with Workbox
 
 ## Getting Started
@@ -60,11 +64,12 @@ src/
 ├── api/            # API fetch functions (weather, geocoding)
 ├── animation/      # Shared Motion animation variants
 ├── components/
+│   ├── atmosphere/ # Sky gradient, weather effects (CSS + Canvas), loading screen
 │   ├── hero/       # Main weather display (temperature, illustration, stats)
 │   ├── temporal/   # 7-day forecast tiles
 │   ├── insights/   # Daylight schedule, precipitation map
 │   ├── layout/     # Navbar, Footer
-│   └── ui/         # Reusable components (GlassCard, SearchInput, etc.)
+│   └── ui/         # Reusable components (GlassCard, SearchInput, QuickSwitcher, etc.)
 ├── context/        # React context for weather state
 ├── hooks/          # Custom hooks (useWeather, useGeocoding, etc.)
 ├── types/          # TypeScript interfaces
