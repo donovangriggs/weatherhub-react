@@ -26,3 +26,4 @@ design-reference/
 *.njsproj
 *.sln
 *.sw?
+.gstack/
