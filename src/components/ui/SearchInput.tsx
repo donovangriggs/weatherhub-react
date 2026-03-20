@@ -96,7 +96,7 @@ export const SearchInput = () => {
         aria-controls="search-results"
         aria-autocomplete="list"
         aria-activedescendant={activeDescendant}
-        className="w-full bg-white/5 border border-white/10 rounded-xl py-2 pl-10 pr-4 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all text-sm"
+        className="w-full bg-white/5 border border-white/10 rounded-xl py-2.5 pl-10 pr-4 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all text-sm min-h-[44px]"
       />
       <AnimatePresence>
         {showDropdown && hasResults && (
