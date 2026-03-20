@@ -22,7 +22,7 @@ export const FavoriteButton = ({ location, size = 'md' }: { location: Location; 
     <button
       onClick={handleClick}
       aria-label={favorited ? `Remove ${location.name} from favorites` : `Add ${location.name} to favorites`}
-      className={`transition-colors ${favorited ? 'text-yellow-400' : 'text-slate-500 hover:text-yellow-400'}`}
+      className={`transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center ${favorited ? 'text-yellow-400' : 'text-slate-500 hover:text-yellow-400'}`}
     >
       <span className={`material-symbols-outlined ${iconSize}`} style={favorited ? { fontVariationSettings: "'FILL' 1" } : undefined}>
         star
