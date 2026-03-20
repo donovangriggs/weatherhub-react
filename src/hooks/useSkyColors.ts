@@ -89,15 +89,15 @@ export const useSkyColors = (options: UseSkyColorsOptions) => {
 
   const setTimeLapseProgress = useCallback((progress: number | null) => {
     timeLapseRef.current = progress
+    if (progress !== null) {
+      const result = computeTimeLapseColors(progress)
+      setSkyColors(result.colors)
+      setTimeOfDay(result.state)
+    }
   }, [])
 
   const update = useCallback(() => {
-    if (timeLapseRef.current !== null) {
-      const result = computeTimeLapseColors(timeLapseRef.current)
-      setSkyColors(result.colors)
-      setTimeOfDay(result.state)
-      return
-    }
+    if (timeLapseRef.current !== null) return
 
     const now = getCurrentTimeInTimezone(timezone)
     const safeSunrise = sunrise || getDefaultSunTimes(now).sunrise
@@ -115,6 +115,15 @@ export const useSkyColors = (options: UseSkyColorsOptions) => {
     const interval = setInterval(update, 60_000)
     return () => clearInterval(interval)
   }, [update])
+
+  // When time-lapse ends, immediately recalculate real sky
+  const prevTimeLapseRef = useRef<number | null>(null)
+  useEffect(() => {
+    if (prevTimeLapseRef.current !== null && timeLapseRef.current === null) {
+      update()
+    }
+    prevTimeLapseRef.current = timeLapseRef.current
+  })
 
   return { skyColors, timeOfDay, setTimeLapseProgress } as const
 }

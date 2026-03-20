@@ -114,9 +114,9 @@ const FogEffect = ({ intensity }: { intensity: string }) => {
 
 const RainLikeEffect = ({ intensity, isDrizzle }: { intensity: string; isDrizzle: boolean }) => {
   const mult = INTENSITY_MULTIPLIER[intensity] ?? 1
-  const baseCount = isDrizzle ? 30 : 50
+  const baseCount = isDrizzle ? 40 : 80
   const count = Math.round(baseCount * mult)
-  const speedRange: [number, number] = isDrizzle ? [1.5, 3] : [0.8, 1.8]
+  const speedRange: [number, number] = isDrizzle ? [1.2, 2.5] : [0.6, 1.4]
 
   const particles = useMemo(() => generateParticles(count, speedRange), [count, speedRange[0], speedRange[1]])
 
@@ -125,14 +125,14 @@ const RainLikeEffect = ({ intensity, isDrizzle }: { intensity: string; isDrizzle
       {particles.map((p, i) => (
         <div
           key={i}
-          className="absolute"
           style={{
+            position: 'absolute',
             left: p.left,
-            top: 0,
-            width: isDrizzle ? 1 : p.size,
-            height: isDrizzle ? 8 : 12 + p.size * 4,
-            background: `rgba(180,200,220,${p.opacity})`,
-            borderRadius: '0 0 1px 1px',
+            top: '-5%',
+            width: isDrizzle ? 1 : Math.max(1.5, p.size),
+            height: isDrizzle ? 12 : 16 + p.size * 6,
+            background: `rgba(200,220,240,${p.opacity * 0.8})`,
+            borderRadius: '0 0 2px 2px',
             animation: `fall ${p.animDuration} linear ${p.animDelay} infinite`,
           }}
         />
@@ -143,16 +143,16 @@ const RainLikeEffect = ({ intensity, isDrizzle }: { intensity: string; isDrizzle
 
 const SnowEffect = ({ intensity }: { intensity: string }) => {
   const mult = INTENSITY_MULTIPLIER[intensity] ?? 1
-  const count = Math.round(35 * mult)
+  const count = Math.round(50 * mult)
 
   const particles = useMemo(
     () =>
       Array.from({ length: count }, () => ({
         left: `${Math.random() * 100}%`,
-        animDuration: `${4 + Math.random() * 6}s`,
-        animDelay: `${-Math.random() * 8}s`,
-        opacity: 0.4 + Math.random() * 0.4,
-        size: 2 + Math.random() * 2,
+        animDuration: `${3 + Math.random() * 5}s`,
+        animDelay: `${-Math.random() * 6}s`,
+        opacity: 0.5 + Math.random() * 0.4,
+        size: 2 + Math.random() * 4,
       })),
     [count],
   )

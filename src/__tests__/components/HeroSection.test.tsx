@@ -31,17 +31,17 @@ describe('HeroSection', () => {
   })
 
   it('renders quick stats in metric', () => {
-    const { getByText } = renderWithContext(<HeroSection />)
-    // 12 mph = 19 km/h, 0 in = 0 mm
-    expect(getByText('0 mm')).toBeInTheDocument()
-    expect(getByText('19 km/h')).toBeInTheDocument()
-    expect(getByText('Mod 5')).toBeInTheDocument()
+    const { getAllByText } = renderWithContext(<HeroSection />)
+    // 12 mph = 19 km/h, 0 in = 0 mm — may render twice (mobile + desktop)
+    expect(getAllByText('0 mm').length).toBeGreaterThanOrEqual(1)
+    expect(getAllByText('19 km/h').length).toBeGreaterThanOrEqual(1)
+    expect(getAllByText('Mod 5').length).toBeGreaterThanOrEqual(1)
   })
 
   it('renders quick stats in imperial when fahrenheit', () => {
-    const { getByText } = renderWithContext(<HeroSection />, { unit: 'fahrenheit' })
-    expect(getByText('0 in')).toBeInTheDocument()
-    expect(getByText('12 mph')).toBeInTheDocument()
+    const { getAllByText } = renderWithContext(<HeroSection />, { unit: 'fahrenheit' })
+    expect(getAllByText('0 in').length).toBeGreaterThanOrEqual(1)
+    expect(getAllByText('12 mph').length).toBeGreaterThanOrEqual(1)
   })
 
   it('shows loading skeleton when loading', () => {
