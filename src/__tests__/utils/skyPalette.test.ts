@@ -62,8 +62,9 @@ describe('getTimeOfDay', () => {
 })
 
 describe('interpolateColors', () => {
-  const a: SkyColors = SKY_PALETTES.dawn
-  const b: SkyColors = SKY_PALETTES.day
+  // Use distinct custom colors since all palettes may be identical
+  const a: SkyColors = { top: '#000000', mid: '#333333', bottom: '#666666', tint: 'rgba(0,0,0,0.2)' }
+  const b: SkyColors = { top: '#ffffff', mid: '#cccccc', bottom: '#999999', tint: 'rgba(255,255,255,0.8)' }
 
   it('returns color a at t=0', () => {
     const result = interpolateColors(a, b, 0)

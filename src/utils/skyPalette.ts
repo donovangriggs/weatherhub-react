@@ -14,14 +14,22 @@ export type SkyColors = {
   readonly tint: string
 }
 
+// Single consistent gradient — deep ocean blue
+const STATIC_SKY: SkyColors = {
+  top: '#0a1628',
+  mid: '#122a4a',
+  bottom: '#1a3a5c',
+  tint: 'rgba(18,42,74,0.2)',
+}
+
 export const SKY_PALETTES: Record<TimeOfDay, SkyColors> = {
-  dawn: { top: '#1a1025', mid: '#4a2545', bottom: '#d4726a', tint: 'rgba(74,37,69,0.2)' },
-  morning: { top: '#4a7fb5', mid: '#87ceeb', bottom: '#b0d4f1', tint: 'rgba(74,127,181,0.12)' },
-  day: { top: '#1565a8', mid: '#2196d4', bottom: '#64b5f6', tint: 'rgba(33,150,212,0.15)' },
-  goldenHour: { top: '#1a1025', mid: '#8b4513', bottom: '#e67e22', tint: 'rgba(139,69,19,0.2)' },
-  dusk: { top: '#0d1321', mid: '#2c1654', bottom: '#6a3d7d', tint: 'rgba(44,22,84,0.2)' },
-  night: { top: '#0a0e1a', mid: '#101d30', bottom: '#162040', tint: 'rgba(16,29,48,0.25)' },
-  midnight: { top: '#050810', mid: '#0a0e1a', bottom: '#101525', tint: 'rgba(10,14,26,0.3)' },
+  dawn: STATIC_SKY,
+  morning: STATIC_SKY,
+  day: STATIC_SKY,
+  goldenHour: STATIC_SKY,
+  dusk: STATIC_SKY,
+  night: STATIC_SKY,
+  midnight: STATIC_SKY,
 }
 
 const parseHex = (hex: string): [number, number, number] => {

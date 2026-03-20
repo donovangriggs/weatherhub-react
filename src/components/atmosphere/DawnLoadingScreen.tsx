@@ -5,16 +5,13 @@ interface DawnLoadingScreenProps {
   readonly onComplete?: () => void
 }
 
-const DAWN_GRADIENT_STOPS = [
-  '#050810',
-  '#1a1025',
-  '#4a2545',
-  '#d4726a',
-  '#f4a460',
-]
+// Match the main app background gradient
+const BG_TOP = '#0a1628'
+const BG_MID = '#122a4a'
+const BG_BOTTOM = '#1a3a5c'
+const GRADIENT = `linear-gradient(180deg, ${BG_TOP}, ${BG_MID}, ${BG_BOTTOM})`
 
 const MIN_DURATION_MS = 1500
-
 const REDUCED_MOTION_QUERY = '(prefers-reduced-motion: reduce)'
 
 const CloudIcon = () => (
@@ -39,61 +36,23 @@ export const DawnLoadingScreen = ({ onComplete }: DawnLoadingScreenProps) => {
   }, [animationComplete, onComplete])
 
   useEffect(() => {
-    if (prefersReducedMotion) {
-      const timer = setTimeout(() => setAnimationComplete(true), MIN_DURATION_MS)
-      return () => clearTimeout(timer)
-    }
-    return undefined
-  }, [prefersReducedMotion])
-
-  const gradientStyle = prefersReducedMotion
-    ? {
-        background: `linear-gradient(to top, ${DAWN_GRADIENT_STOPS[4]}, ${DAWN_GRADIENT_STOPS[3]}, ${DAWN_GRADIENT_STOPS[2]}, ${DAWN_GRADIENT_STOPS[1]}, ${DAWN_GRADIENT_STOPS[0]})`,
-      }
-    : undefined
+    // Auto-complete after minimum duration
+    const timer = setTimeout(() => setAnimationComplete(true), MIN_DURATION_MS)
+    return () => clearTimeout(timer)
+  }, [])
 
   return (
     <div
       className="fixed inset-0 z-50 flex flex-col items-center justify-center overflow-hidden"
-      style={{ background: DAWN_GRADIENT_STOPS[0] }}
+      style={{ background: GRADIENT }}
     >
-      {/* Animated gradient layer */}
-      {prefersReducedMotion ? (
-        <div className="absolute inset-0" style={gradientStyle} />
-      ) : (
-        <motion.div
-          className="absolute inset-0"
-          initial={{
-            background: `linear-gradient(to top, ${DAWN_GRADIENT_STOPS[0]}, ${DAWN_GRADIENT_STOPS[0]}, ${DAWN_GRADIENT_STOPS[0]})`,
-          }}
-          animate={{
-            background: `linear-gradient(to top, ${DAWN_GRADIENT_STOPS[4]}, ${DAWN_GRADIENT_STOPS[3]}, ${DAWN_GRADIENT_STOPS[2]}, ${DAWN_GRADIENT_STOPS[1]}, ${DAWN_GRADIENT_STOPS[0]})`,
-          }}
-          transition={{ duration: 1.8, ease: [0.4, 0, 0.2, 1] }}
-          onAnimationComplete={handleAnimationEnd}
-        />
-      )}
-
-      {/* Horizon line */}
-      {!prefersReducedMotion && (
-        <motion.div
-          className="absolute left-0 right-0 h-px"
-          style={{
-            background: 'linear-gradient(to right, transparent, rgba(244,164,96,0.6), transparent)',
-            bottom: '35%',
-          }}
-          initial={{ opacity: 0, scaleX: 0 }}
-          animate={{ opacity: 1, scaleX: 1 }}
-          transition={{ duration: 1.5, delay: 0.5, ease: [0.4, 0, 0.2, 1] }}
-        />
-      )}
-
       {/* Logo + text */}
       <motion.div
         className="relative z-10 flex flex-col items-center gap-4"
         initial={{ opacity: prefersReducedMotion ? 1 : 0, y: prefersReducedMotion ? 0 : 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: prefersReducedMotion ? 0 : 0.3 }}
+        onAnimationComplete={handleAnimationEnd}
       >
         <div className="bg-primary rounded-2xl flex items-center justify-center w-12 h-12">
           <CloudIcon />
