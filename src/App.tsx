@@ -39,8 +39,14 @@ const AppContent = () => {
     sunset: today?.sunset ?? '',
   })
 
+  // Use selected day's weather code for the atmosphere scene so it matches
+  // the condition shown in the hero section
+  const selectedDay = weatherState
+    ? weatherState.days[weatherState.selectedDayIndex]
+    : undefined
+  const atmosphereCode = selectedDay?.weatherCode ?? weatherState?.current.weather_code ?? 0
   const sceneConfig = weatherState
-    ? getScene(weatherState.current.weather_code, performanceLevel)
+    ? getScene(atmosphereCode, performanceLevel)
     : null
 
   // Set CSS custom properties for sky tinting on wrapper
@@ -67,7 +73,7 @@ const AppContent = () => {
         <SkyGradient skyColors={skyColors} />
         {sceneConfig && sceneConfig.tier !== 'none' && (
           <WeatherScene
-            weatherCode={weatherState.current.weather_code}
+            weatherCode={atmosphereCode}
             performanceLevel={performanceLevel}
           />
         )}

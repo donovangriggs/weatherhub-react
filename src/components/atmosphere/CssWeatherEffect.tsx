@@ -114,9 +114,9 @@ const FogEffect = ({ intensity }: { intensity: string }) => {
 
 const RainLikeEffect = ({ intensity, isDrizzle }: { intensity: string; isDrizzle: boolean }) => {
   const mult = INTENSITY_MULTIPLIER[intensity] ?? 1
-  const baseCount = isDrizzle ? 40 : 80
+  const baseCount = isDrizzle ? 60 : 120
   const count = Math.round(baseCount * mult)
-  const speedRange: [number, number] = isDrizzle ? [1.2, 2.5] : [0.6, 1.4]
+  const speedRange: [number, number] = isDrizzle ? [1.0, 2.0] : [0.5, 1.2]
 
   const particles = useMemo(() => generateParticles(count, speedRange), [count, speedRange[0], speedRange[1]])
 
@@ -128,10 +128,12 @@ const RainLikeEffect = ({ intensity, isDrizzle }: { intensity: string; isDrizzle
           style={{
             position: 'absolute',
             left: p.left,
-            top: '-5%',
-            width: isDrizzle ? 1 : Math.max(1.5, p.size),
-            height: isDrizzle ? 12 : 16 + p.size * 6,
-            background: `rgba(200,220,240,${p.opacity * 0.8})`,
+            top: '-10%',
+            width: isDrizzle ? 1.5 : 2 + p.size,
+            height: isDrizzle ? 18 : 25 + p.size * 8,
+            background: isDrizzle
+              ? `rgba(180,200,230,${p.opacity * 0.6})`
+              : `rgba(220,235,255,${p.opacity * 0.7})`,
             borderRadius: '0 0 2px 2px',
             animation: `fall ${p.animDuration} linear ${p.animDelay} infinite`,
           }}
@@ -143,7 +145,7 @@ const RainLikeEffect = ({ intensity, isDrizzle }: { intensity: string; isDrizzle
 
 const SnowEffect = ({ intensity }: { intensity: string }) => {
   const mult = INTENSITY_MULTIPLIER[intensity] ?? 1
-  const count = Math.round(50 * mult)
+  const count = Math.round(60 * mult)
 
   const particles = useMemo(
     () =>
@@ -151,8 +153,8 @@ const SnowEffect = ({ intensity }: { intensity: string }) => {
         left: `${Math.random() * 100}%`,
         animDuration: `${3 + Math.random() * 5}s`,
         animDelay: `${-Math.random() * 6}s`,
-        opacity: 0.5 + Math.random() * 0.4,
-        size: 2 + Math.random() * 4,
+        opacity: 0.6 + Math.random() * 0.3,
+        size: 3 + Math.random() * 5,
       })),
     [count],
   )
