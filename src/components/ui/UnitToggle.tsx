@@ -7,7 +7,7 @@ export const UnitToggle = () => {
   return (
     <div className="flex bg-white/5 p-1 rounded-lg border border-white/10 relative" role="group" aria-label="Temperature unit">
       <button
-        className={`px-3 py-1 rounded text-xs font-medium transition-colors relative z-10 ${
+        className={`px-4 py-2.5 rounded text-xs font-medium transition-colors relative z-10 min-h-[44px] min-w-[44px] ${
           unit === 'fahrenheit' ? 'text-white' : 'hover:bg-white/5'
         }`}
         onClick={() => setUnit('fahrenheit')}
@@ -24,7 +24,7 @@ export const UnitToggle = () => {
         )}
       </button>
       <button
-        className={`px-3 py-1 rounded text-xs font-medium transition-colors relative z-10 ${
+        className={`px-4 py-2.5 rounded text-xs font-medium transition-colors relative z-10 min-h-[44px] min-w-[44px] ${
           unit === 'celsius' ? 'text-white' : 'hover:bg-white/5'
         }`}
         onClick={() => setUnit('celsius')}
