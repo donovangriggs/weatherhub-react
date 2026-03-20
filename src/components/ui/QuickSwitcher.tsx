@@ -18,7 +18,7 @@ const LocationChip = ({
 }) => (
   <button
     onClick={onSelect}
-    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs transition-colors whitespace-nowrap ${
+    className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs transition-colors whitespace-nowrap min-h-[36px] ${
       isActive
         ? 'bg-primary/20 text-primary border border-primary/30'
         : 'bg-white/5 text-slate-300 border border-white/10 hover:bg-white/10'
