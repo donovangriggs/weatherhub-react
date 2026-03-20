@@ -28,7 +28,7 @@ const AnimatedTemp = ({ value, className, fahrenheit }: { value: number; classNa
   return (
     <span
       className={className}
-      style={{ fontWeight: weight, color: tint, transition: 'font-weight 0.4s ease, color 0.4s ease' }}
+      style={{ fontWeight: weight, color: tint, fontVariantNumeric: 'tabular-nums', transition: 'font-weight 0.4s ease, color 0.4s ease' }}
     >
       {display}°
     </span>

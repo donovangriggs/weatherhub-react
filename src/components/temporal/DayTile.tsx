@@ -55,7 +55,7 @@ export const DayTile = ({ day, index, isToday, isHistory, isSelected }: Props) =
         />
       </div>
 
-      <div>
+      <div style={{ fontVariantNumeric: 'tabular-nums' }}>
         <div className={`font-bold ${isSelected ? 'text-2xl font-black text-white' : 'text-xl'}`}>
           {formatTemperature(day.temperatureMax, unit)}
         </div>
