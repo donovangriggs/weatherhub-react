@@ -25,7 +25,7 @@ export const HeroSection = () => {
       </div>
 
       {/* Desktop layout */}
-      <div className="hidden sm:flex justify-between items-start gap-8 w-full">
+      <div className="hidden sm:flex justify-between items-center gap-8 w-full">
         <CurrentWeather />
         <div className="shrink-0">
           <QuickStats />

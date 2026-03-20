@@ -64,23 +64,40 @@ const generateParticles = (count: number, speedRange: [number, number]): readonl
 const ClearEffect = ({ intensity }: { intensity: string }) => {
   const mult = INTENSITY_MULTIPLIER[intensity] ?? 1
   return (
-    <div
-      className="absolute inset-0"
-      style={{
-        background: 'radial-gradient(ellipse 60% 40% at 70% 15%, rgba(255,220,100,0.25), transparent 70%)',
-        opacity: 0.3 * mult,
-        animation: 'sunPulse 6s ease-in-out infinite',
-      }}
-    />
+    <>
+      {/* Sun glow top-right */}
+      <div
+        className="absolute"
+        style={{
+          top: '-10%',
+          right: '-5%',
+          width: '50vw',
+          height: '50vh',
+          background: 'radial-gradient(ellipse 70% 60% at center, rgba(255,200,60,0.35), rgba(255,180,40,0.15) 40%, transparent 70%)',
+          opacity: 0.6 * mult,
+          animation: 'sunPulse 6s ease-in-out infinite',
+        }}
+      />
+      {/* Warm light rays */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background: 'linear-gradient(135deg, transparent 30%, rgba(255,220,100,0.08) 50%, transparent 70%)',
+          opacity: 0.5 * mult,
+        }}
+      />
+    </>
   )
 }
 
 const CloudyEffect = ({ intensity }: { intensity: string }) => {
   const mult = INTENSITY_MULTIPLIER[intensity] ?? 1
   const blobs = useMemo(() => [
-    { top: '10%', left: '20%', w: 300, h: 150, delay: '0s', opacity: 0.15 * mult },
-    { top: '25%', left: '60%', w: 250, h: 120, delay: '-4s', opacity: 0.18 * mult },
-    { top: '5%', left: '40%', w: 350, h: 180, delay: '-8s', opacity: 0.12 * mult },
+    { top: '5%', left: '10%', w: 500, h: 200, delay: '0s', opacity: 0.35 * mult },
+    { top: '15%', left: '50%', w: 450, h: 180, delay: '-6s', opacity: 0.3 * mult },
+    { top: '0%', left: '30%', w: 600, h: 250, delay: '-12s', opacity: 0.25 * mult },
+    { top: '20%', left: '70%', w: 400, h: 160, delay: '-3s', opacity: 0.3 * mult },
+    { top: '8%', left: '-5%', w: 350, h: 140, delay: '-9s', opacity: 0.28 * mult },
   ], [mult])
 
   return (
@@ -94,10 +111,10 @@ const CloudyEffect = ({ intensity }: { intensity: string }) => {
             left: b.left,
             width: b.w,
             height: b.h,
-            background: 'radial-gradient(ellipse, rgba(200,210,230,0.5), transparent 70%)',
-            filter: 'blur(40px)',
+            background: 'radial-gradient(ellipse, rgba(180,195,220,0.7), rgba(160,180,210,0.3) 50%, transparent 75%)',
+            filter: 'blur(30px)',
             opacity: b.opacity,
-            animation: `driftBlob 20s ease-in-out ${b.delay} infinite`,
+            animation: `driftBlob 25s ease-in-out ${b.delay} infinite`,
           }}
         />
       ))}
@@ -108,14 +125,31 @@ const CloudyEffect = ({ intensity }: { intensity: string }) => {
 const FogEffect = ({ intensity }: { intensity: string }) => {
   const mult = INTENSITY_MULTIPLIER[intensity] ?? 1
   return (
-    <div
-      className="absolute inset-0"
-      style={{
-        background: 'linear-gradient(to bottom, rgba(180,190,200,0.25), rgba(160,170,180,0.15))',
-        opacity: 0.35 * mult,
-        animation: 'fogPulse 8s ease-in-out infinite',
-      }}
-    />
+    <>
+      {/* Main fog layer */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background: 'linear-gradient(to bottom, rgba(200,210,220,0.4), rgba(180,190,200,0.3) 50%, rgba(160,170,180,0.15))',
+          opacity: 0.6 * mult,
+          animation: 'fogPulse 8s ease-in-out infinite',
+        }}
+      />
+      {/* Drifting fog patches */}
+      <div
+        className="absolute"
+        style={{
+          top: '20%',
+          left: '-10%',
+          width: '120%',
+          height: '40%',
+          background: 'radial-gradient(ellipse 80% 100% at center, rgba(200,210,220,0.5), transparent 70%)',
+          filter: 'blur(40px)',
+          opacity: 0.4 * mult,
+          animation: 'driftBlob 30s ease-in-out infinite',
+        }}
+      />
+    </>
   )
 }
 
